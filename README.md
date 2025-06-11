@@ -25,7 +25,7 @@ The app is divided into **frontend** and **backend** folders using the **MERN st
 -   Setup MongoDB connection with Mongoose
 -   Create `.env` files for frontend and backend
 -   Enable CORS and define basic Express server config
--   Setup error handling middleware
+
 
 ### 🔐 Phase 2: Authentication & Roles
 
@@ -55,7 +55,7 @@ The app is divided into **frontend** and **backend** folders using the **MERN st
 #### ✅ Frontend
 
 -   Build artisan profile edit form
--   Allow image upload (Cloudinary or preview)
+-   Allow image upload 
 -   View public artisan profiles
 -   Display availability calendar
 
