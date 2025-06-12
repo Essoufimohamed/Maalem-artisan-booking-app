@@ -4,7 +4,7 @@
 
 ### 🧠 Project Goal
 
-The goal of **Maalem+** is to **simplify and digitize how people find and book verified artisans** (plumbers, electricians, carpenters, etc.) in Morocco and North Africa. By providing a trusted, online-first experience, we aim to:
+The goal of **Maalem+** is to **simplify and digitize how people find and book verified artisans** (plumbers, electricians, carpenters, etc.) in Morocco. By providing a trusted, online-first experience, we aim to:
 
 -   Save users time searching for reliable local help
 -   Offer real-time artisan availability and online booking
