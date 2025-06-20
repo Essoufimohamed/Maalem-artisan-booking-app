@@ -1,29 +1,35 @@
 {
-  "name": "maalem-artisan-booking-app",
-  "version": "1.0.0",
-  "description": "The goal of Maalem+ is to simplify and digitize how people find and book verified artisans (plumbers, electricians, carpenters, etc.) in Morocco. By providing a trusted, online-first experience",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Essoufimohamed/Maalem-artisan-booking-app.git"
-  },
-  "keywords": [
-    "Maalem"
-  ],
-  "author": "Mohamed Essoufi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Essoufimohamed/Maalem-artisan-booking-app/issues"
-  },
-  "homepage": "https://github.com/Essoufimohamed/Maalem-artisan-booking-app#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongoose": "^8.16.0",
-    "nodemon": "^3.1.10"
-  }
+    "name": "maalem-artisan-booking-app",
+    "version": "1.0.0",
+    "description": "The goal of Maalem+ is to simplify and digitize how people find and book verified artisans (plumbers, electricians, carpenters, etc.) in Morocco. By providing a trusted, online-first experience",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon server/server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Essoufimohamed/Maalem-artisan-booking-app.git"
+    },
+    "keywords": [
+        "Maalem"
+    ],
+    "author": "Mohamed Essoufi",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Essoufimohamed/Maalem-artisan-booking-app/issues"
+    },
+    "homepage": "https://github.com/Essoufimohamed/Maalem-artisan-booking-app#readme",
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.16.0",
+        "multer": "^2.0.1",
+        "nodemon": "^3.1.10",
+        "path": "^0.12.7"
+    }
 }
