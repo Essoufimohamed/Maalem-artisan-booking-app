@@ -66,6 +66,7 @@ const RegisterPage = () => {
                     headers: { "Content-Type": "multipart/form-data" },
                 }
             );
+            navigate("/login");
             console.log("success", res);
 
             // localStorage.setItem("token", res.data.token);

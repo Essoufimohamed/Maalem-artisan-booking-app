@@ -5,11 +5,12 @@ const artisanProfileSchema = new mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            // required: true,
         },
         jobType: {
-            type: String,
-            enum: ["plumber", "electrician", "carpenter", "masonry", "other"],
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+            required: true,
         },
         description: String,
         experienceYears: Number,
@@ -18,6 +19,10 @@ const artisanProfileSchema = new mongoose.Schema(
         location: String,
         availability: [{ day: String, hours: [String] }],
         pricingEstimate: String,
+        verified: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

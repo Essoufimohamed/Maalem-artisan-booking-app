@@ -7,18 +7,21 @@ dotenv.config();
 
 // Register
 export const registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, phone, password, role } = req.body;
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser)
             return res.status(400).json({ msg: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const avatar = req.file ? `/uploads/${req.file.filename}` : null;
 
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
+            phone,
+            avatar,
             role,
         });
         res.status(201).json(user);
@@ -54,6 +57,29 @@ export const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select("-password");
         res.json(user);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+};
+
+// GET /api/clients?page=1
+export const getAllClients = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const totalClients = await User.countDocuments({ role: "client" });
+        const clients = await User.find({ role: "client" })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .select("-password"); // Exclude passwords
+
+        res.json({
+            clients,
+            totalPages: Math.ceil(totalClients / limit),
+        });
     } catch (err) {
         res.status(500).json({ msg: err.message });
     }

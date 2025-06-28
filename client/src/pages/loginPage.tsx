@@ -1,39 +1,85 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import axios, { AxiosError } from "axios";
 import registerImg from "../assets/register_bg.jpg";
+import toast from "react-hot-toast";
+import { AutContext } from "@/context/AuthContext";
+
+interface LoginForm {
+    email: string;
+    password: string;
+}
+
+interface DecodedToken {
+    id: string;
+    role: "admin" | "artisan" | "client";
+    // Add more fields if your token includes them
+}
 
 const LoginPage = () => {
-    const [formData, setFormData] = useState({
+    const { setTokenUser } = useContext(AutContext);
+    const [formData, setFormData] = useState<LoginForm>({
         email: "",
         password: "",
     });
-    const [error, setError] = useState("");
+    const [error, setError] = useState<string>("");
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
 
         try {
-            const res = await axios.post(
+            const res = await axios.post<{ token: string }>(
                 "http://localhost:5000/api/users/login",
                 formData
             );
-            console.log(res);
 
-            // localStorage.setItem("token", res.data.token);
-            // navigate("/dashboard");
+            const token = res.data.token;
+            localStorage.setItem("token", token);
+            setTokenUser(token);
+
+            const decoded = jwtDecode<DecodedToken>(token);
+            localStorage.setItem("userId", decoded.id);
+
+            toast.success("Logged in successfully!");
+
+            if (decoded.role === "admin") {
+                navigate("/admin");
+            } else if (decoded.role === "artisan") {
+                const artisanRes = await axios.get(
+                    `http://localhost:5000/api/artisans/me/${decoded.id}`
+                );
+                const artisanProfile = artisanRes.data;
+                console.log(artisanProfile);
+
+                if (
+                    !artisanProfile ||
+                    !artisanProfile.jobType ||
+                    !artisanProfile.location
+                ) {
+                    navigate("/artisanal/create-profile");
+                } else {
+                    navigate("/artisanal");
+                }
+            } else if (decoded.role === "client") {
+                navigate("/client");
+            }
         } catch (err) {
-            setError(err.response?.data?.message || "Login failed");
+            const axiosError = err as AxiosError<{ message?: string }>;
+            setError(axiosError.response?.data?.message || "Login failed");
+            toast.error("Email or password is incorrect.");
         }
     };
 
@@ -42,7 +88,7 @@ const LoginPage = () => {
             style={{ backgroundImage: `url(${registerImg})` }}
             className="relative bg-center bg-cover bg-no-repeat min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4"
         >
-            <div className="absolute inset-0 bg-black opacity-20"></div>
+            <div className="absolute inset-0 bg-black opacity-20" />
             <Card className="relative z-10 w-full max-w-md shadow-xl rounded-2xl">
                 <CardContent className="p-8 space-y-6">
                     <h2 className="text-3xl font-semibold text-center">
@@ -85,8 +131,8 @@ const LoginPage = () => {
                             Log In
                         </Button>
 
-                        <p className="mt-4 text-center text-sm text-grey">
-                            Don't have an account?{" "}
+                        <p className="mt-4 text-center text-sm text-gray-500">
+                            Don&apos;t have an account?{" "}
                             <Link
                                 to="/register"
                                 className="font-semibold text-green-600 hover:underline"

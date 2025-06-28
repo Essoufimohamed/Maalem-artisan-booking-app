@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-
+import { AutContext } from "@/context/AuthContext";
 type Category = {
     _id: string;
     name: string;
@@ -19,9 +19,10 @@ type AvailabilityItem = {
 };
 
 export default function CreateArtisanProfile() {
+    const { userId } = useContext(AutContext);
     const [categories, setCategories] = useState<Category[]>([]);
     const [formData, setFormData] = useState({
-        // user: "685357b7ba1d8dd0fd14d71f",
+        user: userId,
         jobType: "",
         description: "",
         experienceYears: "",
@@ -57,7 +58,7 @@ export default function CreateArtisanProfile() {
         e.preventDefault();
         const submitData = new FormData();
 
-        // submitData.append("user", formData.user);
+        submitData.append("user", formData.user);
         submitData.append("jobType", formData.jobType);
         submitData.append("description", formData.description);
         submitData.append("experienceYears", formData.experienceYears);
@@ -74,7 +75,7 @@ export default function CreateArtisanProfile() {
                     headers: { "Content-Type": "multipart/form-data" },
                 })
                 .then((res) => console.log(res.data));
-            // navigate("/dashboard");
+            navigate("/artisanal");
         } catch (error) {
             console.error("Error creating artisan profile:", error);
         }

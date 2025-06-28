@@ -1,44 +1,120 @@
-import { Card } from "@/components/ui/card";
-import plumberImg from "../assets/plumber.png";
-import electricianImg from "../assets/electrician.png";
-import carpenterImg from "../assets/carpenter.png";
-import painterImg from "../assets/painter.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Button } from "./ui/button";
+import { CirclePlus } from "lucide-react";
+import AddCategory from "./addCategory";
 
-// const categories = [
-//     { title: "Plumber", icon: plumberImg },
-//     { title: "Electrician", icon: electricianImg },
-//     { title: "Carpenter", icon: carpenterImg },
-//     { title: "Painter", icon: painterImg },
-// ];
 export default function Category() {
     const [categories, setCategories] = useState([]);
+    const [addCategory, setAddCategory] = useState(false);
+    const [editCategory, setEditCategory] = useState(null);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await axios.get(
+                "http://localhost:5000/api/categories/with-count"
+            );
+            setCategories(res.data);
+        } catch (err) {
+            console.error("Failed to fetch", err);
+        }
+    };
+
     useEffect(() => {
-        axios
-            .get("http://localhost:5000/api/categories")
-            .then((res) => setCategories(res.data));
+        fetchCategories();
     }, []);
+
+    const handleDeleteCategory = async (id) => {
+        if (!confirm("Are you sure you want to delete this category?")) return;
+        try {
+            await axios.delete(`http://localhost:5000/api/categories/${id}`);
+            setCategories(categories.filter((cat) => cat._id !== id));
+        } catch (err) {
+            console.error("Delete failed", err);
+        }
+    };
+
+    const handleAddCategory = () => {
+        setAddCategory(!addCategory);
+        setEditCategory(null);
+        fetchCategories();
+    };
+
     return (
         <>
-            <section className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-24">
-                {categories.map((cat) => (
-                    <Card
-                        key={cat._id}
-                        className="p-5 flex flex-col items-center rounded-2xl hover:shadow-xl transition"
-                    >
-                        {/* <div className="text-4xl mb-2">{cat.icon}</div> */}
-                        <img
-                            className="w-[120px]"
-                            src={`http://localhost:5000/${cat.image}`}
-                            alt={cat.title}
-                        />
-                        <div className="text-lg capitalize font-medium text-gray-700">
-                            {cat.name}
-                        </div>
-                    </Card>
-                ))}
-            </section>
+            <Button className="mb-3 bg-blue-800" onClick={handleAddCategory}>
+                <CirclePlus className="mr-2" />{" "}
+                {addCategory ? "Close" : "Add Category"}
+            </Button>
+
+            {addCategory && (
+                <AddCategory
+                    editCategory={editCategory}
+                    onSuccess={() => {
+                        fetchCategories();
+                        setEditCategory(null);
+                        setAddCategory(false);
+                    }}
+                />
+            )}
+
+            <div className="overflow-x-auto mb-24">
+                <table className="min-w-full bg-white rounded-lg shadow">
+                    <thead className="bg-gray-100 text-gray-700 text-sm uppercase">
+                        <tr>
+                            <th className="px-6 py-3 text-left">Image</th>
+                            <th className="px-6 py-3 text-left">
+                                Category Name
+                            </th>
+                            <th className="px-6 py-3 text-left">
+                                Artisan Count
+                            </th>
+                            <th className="px-6 py-3 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-sm text-gray-700">
+                        {categories.map((cat) => (
+                            <tr
+                                key={cat._id}
+                                className="border-b hover:bg-gray-50"
+                            >
+                                <td className="px-6 py-4">
+                                    <img
+                                        src={`http://localhost:5000/${cat.image}`}
+                                        alt={cat.name}
+                                        className="w-14 h-14 object-cover rounded"
+                                    />
+                                </td>
+                                <td className="px-6 py-4 capitalize font-medium">
+                                    {cat.name}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {cat.artisanCount || 0}
+                                </td>
+                                <td className="px-6 py-4 space-x-2">
+                                    <button
+                                        onClick={() => {
+                                            setEditCategory(cat);
+                                            setAddCategory(true);
+                                        }}
+                                        className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteCategory(cat._id)
+                                        }
+                                        className="px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     );
 }
