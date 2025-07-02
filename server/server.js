@@ -51,14 +51,16 @@ io.on("connection", (socket) => {
 
     socket.on("join", (roomId) => {
         socket.join(roomId);
+        console.log(`Socket ${socket.id} joined room ${roomId}`);
+    });
+
+    socket.on("leave", (roomId) => {
+        socket.leave(roomId);
+        console.log(`Socket ${socket.id} left room ${roomId}`);
     });
 
     socket.on("sendMessage", ({ roomId, message }) => {
-        socket.to(roomId).emit("receiveMessage", message);
-    });
-
-    socket.on("disconnect", () => {
-        console.log("User disconnected");
+        socket.to(roomId).emit("receiveMessage", message); // emit to room
     });
 });
 

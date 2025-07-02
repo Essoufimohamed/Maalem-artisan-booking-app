@@ -2,32 +2,59 @@ import Booking from "../models/Booking.js";
 
 export const createBooking = async (req, res) => {
     try {
-        const booking = await Booking.create(req.body);
+        const { artisanId, selectedDate, time, note } = req.body;
+        if (!artisanId || !selectedDate || !time) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        const booking = await Booking.create({
+            client: req.user._id, // user injected by auth middleware
+            artisan: artisanId,
+            date: new Date(selectedDate),
+            time,
+            note,
+        });
+
         res.status(201).json(booking);
     } catch (err) {
         res.status(500).json({ msg: err.message });
     }
 };
 
-export const getBookingsForClient = async (req, res) => {
+// export const getBookingsForClient = async (req, res) => {
+//     try {
+//         const bookings = await Booking.find({
+//             client: req.params.clientId,
+//         }).populate("artisan");
+//         res.json(bookings);
+//     } catch (err) {
+//         res.status(500).json({ msg: err.message });
+//     }
+// };
+
+export const getBookingsByClient = async (req, res) => {
     try {
-        const bookings = await Booking.find({
-            client: req.params.clientId,
-        }).populate("artisan");
+        const bookings = await Booking.find({ client: req.params.clientId })
+            .populate("artisan", "name avatar")
+            .sort({ createdAt: -1 });
         res.json(bookings);
     } catch (err) {
-        res.status(500).json({ msg: err.message });
+        res.status(500).json({ message: "Server error" });
     }
 };
 
 export const getBookingsForArtisan = async (req, res) => {
     try {
-        const bookings = await Booking.find({
-            artisan: req.params.artisanId,
-        }).populate("client");
-        res.json(bookings);
-    } catch (err) {
-        res.status(500).json({ msg: err.message });
+        const { artisanId } = req.query;
+
+        const query = artisanId ? { artisan: artisanId } : {};
+        const bookings = await Booking.find(query)
+            .populate("client", "name")
+            .sort({ createdAt: -1 });
+
+        res.json({ bookings });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch bookings" });
     }
 };
 

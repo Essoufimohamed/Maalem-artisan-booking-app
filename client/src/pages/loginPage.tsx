@@ -74,7 +74,7 @@ const LoginPage = () => {
                     navigate("/artisanal");
                 }
             } else if (decoded.role === "client") {
-                navigate("/client");
+                navigate("/");
             }
         } catch (err) {
             const axiosError = err as AxiosError<{ message?: string }>;

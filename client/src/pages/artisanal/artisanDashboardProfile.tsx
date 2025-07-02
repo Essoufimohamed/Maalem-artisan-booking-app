@@ -170,7 +170,7 @@ export default function ArtisanViewProfile() {
     const handleSave = async () => {
         try {
             const res = await axios.put(
-                `${import.meta.env.VITE_API_URL}/api/artisans/me/${userId}`,
+                `http://localhost:5173/api/artisans/me/${userId}`,
                 {
                     description: form.description,
                     pricingEstimate: form.pricingEstimate,
@@ -178,8 +178,8 @@ export default function ArtisanViewProfile() {
                     portfolio: form.portfolio,
                 }
             );
-
             toast.success("Profile updated!");
+
             setArtisan(res.data);
             setIsEditing(false);
         } catch (err) {
@@ -221,7 +221,7 @@ export default function ArtisanViewProfile() {
                     <img
                         src={
                             artisan.user?.avatar
-                                ? `${artisan.user?.avatar}`
+                                ? `http://localhost:5000${artisan.user?.avatar}`
                                 : "/default-avatar.jpg"
                         }
                         alt="Avatar"
@@ -378,7 +378,9 @@ export default function ArtisanViewProfile() {
 
                 {isEditing && (
                     <button
-                        onClick={handleSave}
+                        onClick={() => {
+                            handleSave();
+                        }}
                         className="bg-green-500 text-white px-6 py-2 mt-6 rounded"
                     >
                         Save Changes

@@ -19,14 +19,14 @@ const UserDropdown = ({ user, role }) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="group flex items-center gap-3 px-3 py-1.5 rounded-lg bg-transparant hover:bg-[#e6e6e6]   transition-all">
+                <Button className="group flex items-center gap-3 px-3 py-1.5  bg-transparant hover:bg-transparant outline-none   transition-all">
                     <img
                         src={
                             `http://localhost:5000${user.avatar}` ||
                             "/default-avatar.png"
                         }
                         alt="avatar"
-                        className="w-9 h-9 rounded-md object-cover border border-gray-300"
+                        className="w-9 h-9 rounded-full object-cover border border-gray-300"
                     />
                     <div className="text-left hidden sm:block">
                         <p className="text-sm font-semibold text-gray-800 group-hover:text-[#3D5F44] transition">
@@ -47,28 +47,44 @@ const UserDropdown = ({ user, role }) => {
                     Welcome, {user.name?.split(" ")[0]}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {role === "artisan" ? (
+                    <>
+                        <DropdownMenuItem asChild>
+                            <Link
+                                to={`/artisanal`}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <LayoutDashboard className="w-4 h-4" />
+                                Dashboard
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link
+                                to={`/artisanal/profile`}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <User className="w-4 h-4" />
+                                Profile
+                            </Link>
+                        </DropdownMenuItem>
+                    </>
+                ) : role === "admin" ? (
+                    <>
+                        <DropdownMenuItem asChild>
+                            <Link
+                                to={`/admin`}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <LayoutDashboard className="w-4 h-4" />
+                                Dashboard
+                            </Link>
+                        </DropdownMenuItem>
+                    </>
+                ) : (
+                    ""
+                )}
 
-                <DropdownMenuItem asChild>
-                    <Link
-                        to={`/${role}/dashboard`}
-                        className="flex items-center gap-2 text-sm"
-                    >
-                        <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
-                    </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                    <Link
-                        to={`/${role}/profile`}
-                        className="flex items-center gap-2 text-sm"
-                    >
-                        <User className="w-4 h-4" />
-                        Profile
-                    </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                     <Link
                         to={`/${role}/settings`}
                         className="flex items-center gap-2 text-sm"
@@ -76,7 +92,7 @@ const UserDropdown = ({ user, role }) => {
                         <Settings className="w-4 h-4" />
                         Settings
                     </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuSeparator />
 

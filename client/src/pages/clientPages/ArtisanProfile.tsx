@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import {
 import BookingModal from "@/pages/clientPages/BookingModal";
 import toast from "react-hot-toast";
 import type { Artisan } from "@/types";
+import { AutContext } from "@/context/AuthContext";
 
 export default function ArtisanProfile() {
     const navigate = useNavigate();
@@ -22,6 +23,33 @@ export default function ArtisanProfile() {
     const [error, setError] = useState<string | null>(null);
     const [isBookingOpen, setIsBookingOpen] = useState(false);
 
+    const { userId } = useContext(AutContext);
+    const handleContactClick = async () => {
+        // !userId ? navigate("/login") : "";
+
+        if (!userId) {
+            navigate("/login");
+            return;
+        }
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/chat/conversations`,
+                {
+                    userId: userId,
+                    artisanProfileId: artisan._id, // <-- correct
+                }
+            );
+
+            if (!userId) {
+            } else {
+                const conversationId = res.data._id;
+                navigate(`/chat/${conversationId}`);
+            }
+        } catch (err) {
+            toast.error("Could not start conversation.");
+            console.error(err);
+        }
+    };
     const handleBookingSubmit = async (data: any) => {
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings`, {
@@ -116,22 +144,31 @@ export default function ArtisanProfile() {
 
                     <div className="flex gap-4 mt-6">
                         <button
-                            className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
+                            className="mt-3 px-6 py-2 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition"
                             onClick={() => setIsBookingOpen(true)}
                         >
                             Book Now
                         </button>
 
-                        <BookingModal
+                        {/* <BookingModal
                             open={isBookingOpen}
                             onClose={() => setIsBookingOpen(false)}
                             artisanName={artisan.user?.name ?? "Artisan"}
                             onSubmit={handleBookingSubmit}
+                        /> */}
+                        <BookingModal
+                            isOpen={isBookingOpen}
+                            onClose={() => setIsBookingOpen(false)}
+                            onBook={(data) => {
+                                console.log("Booking confirmed:", data);
+                                // Send to backend
+                            }}
+                            artisanCategory="plumber" // or "electrician", "carpenter"
                         />
-
                         <button
-                            className="px-6 py-2 border border-orange-600 text-orange-600 rounded-xl hover:bg-orange-100 transition"
-                            onClick={() => navigate(`/chat/${artisan._id}`)}
+                            className="mt-3 px-6 py-2 border border-orange-600 text-orange-600 rounded-xl hover:bg-orange-100 transition"
+                            // onClick={() => navigate(`/chat/${artisan._id}`)}
+                            onClick={handleContactClick}
                         >
                             Contact
                         </button>

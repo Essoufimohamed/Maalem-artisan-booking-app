@@ -1,42 +1,49 @@
 import express from "express";
 import Conversation from "../models/Conversation.js";
 import Message from "../models/Messages.js";
+import ArtisanProfile from "../models/ArtisanProfile.js";
 
 const router = express.Router();
 
 router.post("/conversations", async (req, res) => {
-    const { userId, artisanId } = req.body;
+    const { userId, artisanProfileId } = req.body;
+
+    if (!userId || !artisanProfileId) {
+        return res
+            .status(400)
+            .json({ message: "Both userId and artisanProfileId are required" });
+    }
+
     try {
+        // ✅ Get the artisan's user ID from the ArtisanProfile
+        const artisanProfile = await ArtisanProfile.findById(artisanProfileId);
+        if (!artisanProfile || !artisanProfile.user) {
+            return res
+                .status(404)
+                .json({ message: "Artisan profile not found" });
+        }
+
+        const artisanUserId = artisanProfile.user.toString();
+
+        // ✅ Look for existing conversation between user and artisan's user ID
         let conversation = await Conversation.findOne({
-            members: { $all: [userId, artisanId] },
+            members: { $all: [userId, artisanUserId], $size: 2 },
         });
+
+        // ✅ If no conversation exists, create one
         if (!conversation) {
-            conversation = new Conversation({ members: [userId, artisanId] });
+            conversation = new Conversation({
+                members: [userId, artisanUserId],
+            });
             await conversation.save();
         }
+
         res.status(200).json(conversation);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ message: "Server error" });
     }
 });
-
-// // Create/get conversation between artisan and client
-// router.post("/conversation", async (req, res) => {
-//     const { senderId, receiverId } = req.body;
-//     try {
-//         let conv = await Conversation.findOne({
-//             members: { $all: [senderId, receiverId] },
-//         });
-//         if (!conv) {
-//             conv = await Conversation.create({
-//                 members: [senderId, receiverId],
-//             });
-//         }
-//         res.status(200).json(conv);
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// });
 
 // Get all conversations of a user
 router.get("/conversations/:userId", async (req, res) => {
@@ -70,6 +77,17 @@ router.post("/message", async (req, res) => {
         res.status(201).json(msg);
     } catch (err) {
         res.status(500).json(err);
+    }
+});
+
+router.get("/client-messages/:clientId", async (req, res) => {
+    try {
+        const conversations = await Conversation.find({
+            "members._id": req.params.clientId,
+        }).populate("members", "name avatar");
+        res.json(conversations);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch" });
     }
 });
 

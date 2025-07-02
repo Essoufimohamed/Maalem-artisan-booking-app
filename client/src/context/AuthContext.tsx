@@ -18,7 +18,7 @@ export default function AuthContext({ children }) {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                const decoded = jwtDecode(tokenUser);
+                const decoded = jwtDecode(token);
 
                 setRole(decoded.role);
 
@@ -27,7 +27,9 @@ export default function AuthContext({ children }) {
                 setTokenUser(token);
 
                 axios
-                    .get(`http://localhost:5000/api/users/${decoded.id}`)
+                    .get(`http://localhost:5000/api/users/${decoded.id}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    })
                     .then((res) => setuser(res.data))
                     .catch((error) => error);
             } catch (error) {

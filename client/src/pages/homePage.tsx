@@ -198,9 +198,16 @@ import axios from "axios";
 
 import HeroSection from "@/components/hero-section";
 import HowItWorks from "@/components/HowItWorks";
-import FeaturedArtisans from "@/components/FeaturedArtisans";
+// import FeaturedArtisans from "@/components/FeaturedArtisans";
 import CallToAction from "@/components/CallToAction";
 import type { Artisan } from "@/types";
+
+import ArtisanCard from "../pages/ArtisanCard.tsx";
+import CategoryList from "@/components/CategoryList.tsx";
+import TopArtisanFilters from "@/components/TopArtisanFilters.tsx";
+import GalleryOfWork from "@/components/galleryWork.tsx";
+import FeaturedArtisansCarousel from "@/components/FeaturedArtisansCarousel.tsx";
+import GroupedArtisanCarousels from "@/components/GroupedArtisanCarousels.tsx";
 
 export default function HomePage() {
     const [artisans, setArtisans] = useState<Artisan[]>([]);
@@ -217,11 +224,18 @@ export default function HomePage() {
     return (
         <>
             <HeroSection />
-            <div className="px-6 py-16 max-w-7xl mx-auto font-sans">
-                <HowItWorks />
-                <FeaturedArtisans artisans={artisans} />
-                <CallToAction />
-            </div>
+            {/* <div className="px-6 py-16 max-w-7xl mx-auto font-sans"> */}
+            <HowItWorks />
+            <CategoryList />
+            <GroupedArtisanCarousels />
+
+            {/* <FeaturedArtisansCarousel /> */}
+            {/* </div> */}
+            <TopArtisanFilters />
+            <CallToAction />
+            <ArtisanCard />
+            {/* <FeaturedArtisans artisans={artisans} /> */}
+            <GalleryOfWork />
         </>
     );
 }
