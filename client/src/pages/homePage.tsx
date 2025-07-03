@@ -231,11 +231,11 @@ export default function HomePage() {
 
             {/* <FeaturedArtisansCarousel /> */}
             {/* </div> */}
-            <TopArtisanFilters />
+            {/* <TopArtisanFilters /> */}
             <CallToAction />
-            <ArtisanCard />
+            {/* <ArtisanCard /> */}
             {/* <FeaturedArtisans artisans={artisans} /> */}
-            <GalleryOfWork />
+            {/* <GalleryOfWork /> */}
         </>
     );
 }

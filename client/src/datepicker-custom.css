@@ -1,0 +1,70 @@
+/* Override react-datepicker default styles to match orange theme */
+.react-datepicker {
+    border: 1px solid #f97316; /* orange-500 */
+    border-radius: 0.75rem; /* rounded-xl */
+    font-family: 'Inter', sans-serif; /* or your project's font */
+    box-shadow: 0 4px 12px rgb(249 115 22 / 0.3); /* subtle orange shadow */
+  }
+  
+  .react-datepicker__header {
+    background-color: #fffaf4; /* orange-200 */
+    border-bottom: 1px solid #fb923c; /* orange-400 */
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .react-datepicker__current-month {
+    color: #c2410c; /* orange-700 */
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+  
+  .react-datepicker__day-name,
+  .react-datepicker__day {
+    color: #c2410c; /* orange-700 */
+    font-weight: 500;
+  }
+  
+  .react-datepicker__day:hover {
+    /* background-color: #fb923c;  */
+    background-color: #d36307; /* orange-400 */
+    color: white;
+    border-radius: 0.5rem;
+  }
+  
+  .react-datepicker__day--selected,
+  .react-datepicker__day--keyboard-selected {
+    background-color: #ea580c; /* orange-600 */
+    color: white;
+    border-radius: 0.5rem;
+  }
+  
+  .react-datepicker__triangle {
+    display: none; /* optional, remove small triangle */
+  }
+  
+  .react-datepicker__navigation--previous,
+  .react-datepicker__navigation--next {
+    top: 1rem;
+    line-height: 1.5rem;
+    border: none;
+    background-color: transparent;
+    color: #c2410c; /* orange-700 */
+    font-weight: bold;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+  
+  .react-datepicker__navigation--previous:hover,
+  .react-datepicker__navigation--next:hover {
+    color: #ea580c; /* orange-600 */
+  }
+  
+  /* Disabled days */
+  .react-datepicker__day--disabled {
+    color: #f97316; /* orange-500 */
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  

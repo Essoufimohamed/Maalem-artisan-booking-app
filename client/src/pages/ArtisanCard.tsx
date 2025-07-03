@@ -35,6 +35,7 @@ const ArtisanList = () => {
             .catch((err) => console.error("Error loading artisans:", err))
             .finally(() => setLoading(false));
     }, [currentPage]);
+    console.log(artisans);
 
     return (
         <div className="min-h-screen bg-[#F9F9F9] p-6">

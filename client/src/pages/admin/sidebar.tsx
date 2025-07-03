@@ -8,7 +8,7 @@ import {
     Settings,
     LogOut,
 } from "lucide-react";
-import logo from "../../../public/maalem_logo.png";
+import logo from "../../../public/logo.png";
 
 const menuItems = [
     { name: "Dashboard", path: "/admin", icon: <Home size={18} /> },
@@ -32,12 +32,9 @@ export default function SideBar() {
 
     return (
         <aside className="md:fixed w-64 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col">
-            <section className=" px-6 py-5 border-b">
-                <Link to={"/"} className="flex items-center">
-                    <img src={logo} alt="Maalem+ Logo" className="w-10 h-8" />
-                    <h2 className="ml-3 text-xl font-bold text-gray-800">
-                        Maalem+
-                    </h2>
+            <section className=" px-6 py-4 border-b">
+                <Link to={"/"} className="flex items-center mx-auto">
+                    <img src={logo} alt="Maalem+ Logo" className="h-12" />
                 </Link>
             </section>
 
