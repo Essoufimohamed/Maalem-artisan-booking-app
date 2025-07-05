@@ -9,12 +9,18 @@ import Category from "@/components/categories";
 import DashboardHome from "./home-dash";
 import ArtisanProfilePage from "@/layout/ArtisanProfilePage";
 import ArtisanProfile from "../clientPages/ArtisanProfile";
+import { useState } from "react";
 
 export default function Dashboard() {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
     return (
-        <div className="flex">
-            <SideBar />
-            <main className="ml-64 w-full p-6 bg-gray-100 min-h-screen">
+        <div className="flex h-screen bg-gray-100 overflow-hidden">
+            <SideBar
+                isOpen={isSidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+            />
+            <main className=" w-full p-3 bg-gray-100 min-h-screen overflow-y-auto">
                 <Routes>
                     <Route index element={<DashboardHome />} />
                     <Route path="bookings" element={<Bookings />} />

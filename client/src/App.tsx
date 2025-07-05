@@ -14,6 +14,9 @@ import ArtisanProfile from "./pages/clientPages/ArtisanProfile";
 import MessagesPage from "./pages/artisanal/messagesPage";
 import ClientMessagesPage from "./pages/clientPages/ClientMessagesPage";
 import ClientBookingsPage from "./pages/clientPages/ClientBookingsPage";
+import AllArtisansPage from "./pages/AllArtisansPage";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 function App() {
     return (
@@ -38,6 +41,9 @@ function App() {
                         path="clientbooking"
                         element={<ClientBookingsPage />}
                     />
+                    <Route path="/artisans" element={<AllArtisansPage />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
 
                     <Route path="login" element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />

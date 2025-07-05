@@ -308,7 +308,7 @@ const GroupedArtisanCarousels = () => {
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-sm text-gray-600 mt-3 line-clamp-3 text-center">
+                                        <p className="text-sm text-gray-600 mt-3 line-clamp-2 text-center">
                                             {artisan.description}
                                         </p>
 
@@ -335,6 +335,15 @@ const GroupedArtisanCarousels = () => {
                                 </div>
                             ))}
                         </Slider>
+                        {artisans.length > 6 && (
+                            <div className="mt-10 rounded-2xl  p-6 flex items-center justify-center">
+                                <Link to="/artisans">
+                                    <button className="px-10 w-full border border-orange-500 hover:bg-orange-500 hover:text-white text-orange-500 font-semibold py-2 rounded-full transition">
+                                        See More
+                                    </button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}

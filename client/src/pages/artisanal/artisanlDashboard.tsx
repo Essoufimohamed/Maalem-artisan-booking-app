@@ -32,7 +32,7 @@
 //     );
 // }
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import SideBarArtisanal from "./sidebarArtisanal";
 import MessagesPage from "./messagesPage";
@@ -41,9 +41,28 @@ import CreateArtisanProfile from "@/layout/CreateArtisanProfile";
 import ArtisanDashboardProfile from "./artisanDashboardProfile";
 import BookingsPage from "./bookingArtisanalPage";
 import { Menu } from "lucide-react";
+import DashboardHeader from "@/components/HeaderDashboard";
+import { AutContext } from "@/context/AuthContext";
 
 export default function ArtisanlDashboard() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const { user } = useContext(AutContext);
+
+    const notifications = [
+        {
+            title: "Booking Confirmed",
+            message:
+                "Your appointment with Ahmed the Electrician is confirmed.",
+        },
+        {
+            title: "New Message",
+            message: "You have a new message from Youssef the Plumber.",
+        },
+        {
+            title: "Profile Approved",
+            message: "Your artisan profile is now verified.",
+        },
+    ];
 
     return (
         <div className="flex h-screen bg-gray-100 overflow-hidden">
@@ -68,7 +87,12 @@ export default function ArtisanlDashboard() {
                 </header>
 
                 {/* Content */}
-                <main className="flex-1 overflow-y-auto p-4 md:p-6">
+                <main className="flex-1 overflow-y-auto p-4 md:p-2">
+                    <DashboardHeader
+                        user={user}
+                        unreadCount={3}
+                        notifications={notifications}
+                    />
                     <Routes>
                         <Route path="messages" element={<MessagesPage />} />
                         <Route path="messages/:id" element={<MessagesPage />} />

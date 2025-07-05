@@ -12,6 +12,7 @@ export default function AuthContext({ children }) {
     );
 
     const [user, setuser] = useState(null);
+    const [artisan, setArtisan] = useState({});
 
     //user login info
     useEffect(() => {
@@ -38,10 +39,19 @@ export default function AuthContext({ children }) {
         }
     }, [tokenUser]);
 
+    useEffect(() => {
+        if (role === "artisan" && userId) {
+            axios
+                .get(`http://localhost:5000/api/artisans/me/${userId}`)
+                .then((res) => setArtisan(res.data))
+                .catch((error) => console.error("Artisan fetch error", error));
+        }
+    }, [role, userId]);
+
     return (
         <>
             <AutContext.Provider
-                value={{ role, userId, setTokenUser, tokenUser, user }}
+                value={{ role, userId, setTokenUser, tokenUser, user, artisan }}
             >
                 {children}
             </AutContext.Provider>

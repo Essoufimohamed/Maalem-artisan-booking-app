@@ -87,7 +87,7 @@ const ArtisanList = () => {
                         </div>
 
                         {/* Description */}
-                        <p className="text-sm text-gray-600 text-center mt-3 line-clamp-3">
+                        <p className="text-sm text-gray-600 text-center mt-3 line-clamp-1">
                             {artisan.description}
                         </p>
 
